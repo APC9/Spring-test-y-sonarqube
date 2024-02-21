@@ -16,8 +16,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        args: >
-          -Dsonar.projectKey=test_project_key
         # Disabling shallow clones is recommended for improving the relevancy of reporting
         fetch-depth: 0
     - name: SonarQube Scan
