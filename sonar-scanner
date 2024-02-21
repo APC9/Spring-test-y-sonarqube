@@ -1,0 +1,7 @@
+docker run \
+    --rm \
+    -e SONAR_HOST_URL="http://192.168.1.15:9000" \
+    -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=prueba" \
+    -e SONAR_TOKEN="sqp_6bc46f9307632ca6d7fbb399ee11d6dbfda7a88c" \
+    -v "/home/apc/Documentos/Angular/Ingresos-app:/usr/src" \
+    sonarsource/sonar-scanner-cli
