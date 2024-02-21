@@ -1,35 +1,25 @@
-
-name: SonarQube analysis
-
 on:
+  # Trigger analysis when pushing to your main branches, and when creating a pull request.
   push:
-    branches: [ "master" ]
-  workflow_dispatch:
-  
+    branches:
+      - main
+      - master
+      - develop
+      - 'releases/**'
+  pull_request:
+      types: [opened, synchronize, reopened]
+
+name: Main Workflow
 jobs:
-
-  build:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-          cache: 'maven'
-      
-      - name: Build with Maven
-        run: mvn -B clean package --file pom.xml
-
-      - name: Run Tests
-        run: mvn test --file pom.xml
-          
-  Analysis:
+  sonarqube:
     runs-on: ubuntu-latest
     steps:
-      - name: Analyze with SonarQube
-        uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on SonarQube, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}   # add the URL of your instance to the secrets of this repo with the name SONAR_HOST_URL (Settings > Secrets > Actions > add new repository secret)
-
+    - uses: actions/checkout@v3
+      with:
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
