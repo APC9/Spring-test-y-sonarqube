@@ -1,0 +1,35 @@
+
+name: SonarQube analysis
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+  
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
+      
+      - name: Build with Maven
+        run: mvn -B clean package --file pom.xml
+
+      - name: Run Tests
+        run: mvn test --file pom.xml
+          
+  Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Analyze with SonarQube
+        uses: SonarSource/sonarqube-scan-action@7295e71c9583053f5bf40e9d4068a0c974603ec8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on SonarQube, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}   # add the URL of your instance to the secrets of this repo with the name SONAR_HOST_URL (Settings > Secrets > Actions > add new repository secret)
+
