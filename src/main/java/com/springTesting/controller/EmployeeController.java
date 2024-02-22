@@ -2,7 +2,6 @@ package com.springTesting.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,8 +23,11 @@ import com.springTesting.service.EmployeeService;
 @RequestMapping("/employee")
 public class EmployeeController {
     
-  @Autowired
-  private EmployeeService employeeService;
+  private final EmployeeService employeeService;
+
+  public EmployeeController( EmployeeService employeeService ) {
+    this.employeeService = employeeService;
+  }
 
   @PostMapping
   @ResponseStatus( HttpStatus.CREATED )
@@ -48,13 +50,13 @@ public class EmployeeController {
   @PutMapping("/{id}")
   public ResponseEntity<Employee> updateEmployee(@PathVariable Long id, @RequestBody UpdateEmployeedDto updateEmployeedDto) {
     Employee employee = employeeService.updateEmployee(updateEmployeedDto, id);
-    return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+    return new ResponseEntity<>(employee, HttpStatus.OK);
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<String> deleteEmployee(@PathVariable Long id){
     employeeService.deleteEmployee(id);
-    return new ResponseEntity<String>("Employee with id " +id+ " deleted successfully", HttpStatus.OK);
+    return new ResponseEntity<>("Employee with id " +id+ " deleted successfully", HttpStatus.OK);
   }
 
 }

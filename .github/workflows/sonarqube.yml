@@ -7,9 +7,7 @@ on:
       - master
       - develop
       - 'releases/**'
-  pull_request:
-      types: [opened, synchronize, reopened]
-
+      
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
@@ -20,6 +18,3 @@ jobs:
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-      with:
-        args: 
-          -Dsonar.projectKey=action-key
