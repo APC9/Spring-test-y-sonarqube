@@ -7,12 +7,19 @@ on:
       - master
       - develop
       - 'releases/**'
-      
+
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: test 
+      run: mvn clean verify
+    
+    - name: Compile code
+      run: mvn clean compile
+
     - name: SonarQube Scan
       uses: sonarsource/sonarqube-scan-action@master
       env:
