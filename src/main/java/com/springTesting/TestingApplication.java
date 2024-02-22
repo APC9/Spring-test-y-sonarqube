@@ -10,4 +10,5 @@ public class TestingApplication {
 		SpringApplication.run(TestingApplication.class, args);
 	}
 
+	// este es un fallo intencional para sonar
 }
